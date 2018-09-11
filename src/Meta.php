@@ -65,7 +65,7 @@ class Meta
             return '日期';
         }
 
-        throw new \Exception('unknown field type:'.json_encode($type));
+        throw new \Exception('unknown field type:' . json_encode($type));
     }
 
     /**
@@ -153,13 +153,15 @@ class Meta
     private static function getTpl(string $name): string
     {
         // 构造所在目录(当前模块,当前控制器,当前动作
-        $path = __DIR__.'/../tpl/' ;
+        $path = dirname(__DIR__) . '/tpl/';
         return file_get_contents($path . $name . '.tpl');
     }
 
     static private $root;
-    public static function setRoot(string $root){
-        self::$root=$root;
+
+    public static function setRoot(string $root)
+    {
+        self::$root = $root;
     }
 
     /**
