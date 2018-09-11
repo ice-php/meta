@@ -153,7 +153,7 @@ class Meta
     private static function getTpl(string $name): string
     {
         // 构造所在目录(当前模块,当前控制器,当前动作
-        $path = '../tpl/' ;
+        $path = __DIR__.'/../tpl/' ;
         return file_get_contents($path . $name . '.tpl');
     }
 
