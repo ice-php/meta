@@ -23,7 +23,7 @@ class Meta
      * 数据类型转换成可读格式
      * @param $field array 字段描述
      * @return string 类型
-     * @throws \Exception
+     * @throws MetaException
      */
     public static function mapType(array $field): string
     {
@@ -65,17 +65,21 @@ class Meta
             return '日期';
         }
 
-        throw new \Exception('unknown field type:' . json_encode($type));
+        throw new MetaException('无法识别的数据类型:' . json($type), MetaException::TYPE_UNKNOWN);
     }
 
     /**
      * 获取全部数据库
      * @return array
+     * @throws MetaException
      */
     public static function dictDatabases(): array
     {
         //取全部数据库
-        $dbsConfig = config('database');
+        $dbsConfig = configDefault('', 'database');
+        if (!$dbsConfig) {
+            throw new MetaException('缺少数据库配置(database)', MetaException::DATABASE_CONFIG_MISS);
+        }
         $dbs = [];
 
         foreach ($dbsConfig as $v) {
@@ -89,7 +93,7 @@ class Meta
     /**
      * 获取指定库有的全部表的描述 信息
      * @return array
-     * @throws \Exception
+     * @throws MetaException|MysqlException|TableException
      */
     public static function dictTables(): array
     {
@@ -130,9 +134,9 @@ class Meta
      * 获取一个表的数据字典描述
      * @param $name string 表名
      * @return array
-     * @throws \Exception
+     * @throws TableException|MysqlException
      */
-    private static function dictTable(string $name): array
+    public static function dictTable(string $name): array
     {
         //取单个表结构
         $meta = table($name)->meta();
@@ -205,7 +209,7 @@ class Meta
     /**
      * 生成一个表的记录基类
      * @param array $info 表信息
-     * @throws \Exception
+     * @throws TableException|MysqlException
      */
     static private function recordBase(array $info): void
     {
@@ -370,7 +374,7 @@ class Meta
     /**
      * 生成一个表的基类
      * @param $info array 表信息
-     * @throws \Exception
+     * @throws TableException|MysqlException
      */
     static private function tableBase(array $info): void
     {
@@ -509,7 +513,7 @@ class Meta
 
     /**
      * 自动创建表对象
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     static public function table(): void
     {
@@ -536,7 +540,7 @@ class Meta
 
     /**
      * 自动创建表对象
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     static public function record(): void
     {
@@ -564,7 +568,7 @@ class Meta
     /**
      * 自动创建一个表对象
      * @param string $table 表名
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     static public function tableOne(string $table): void
     {
@@ -590,7 +594,7 @@ class Meta
     /**
      * 自动创建一个记录对象
      * @param string $table 表名
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     static public function recordOne(string $table): void
     {
@@ -615,7 +619,7 @@ class Meta
 
     /**
      * 删除表数据
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     public static function deleteTableData(): void
     {
@@ -657,6 +661,7 @@ class Meta
      * 数据库升级后的对比
      * @param $configSrc array 新库(源)的连接配置
      * @param $configTrg array 旧库(目标)的连接配置
+     * @throws MysqlException
      */
     public static function compare(array $configSrc, array $configTrg): void
     {
@@ -745,7 +750,7 @@ class Meta
 
     /**
      * 修复数据库中的所有表
-     * @throws \Exception
+     * @throws TableException|MysqlException
      */
     public static function repair(): void
     {
@@ -774,7 +779,7 @@ class Meta
 
     /**
      * 将所有MyISAM修改为InnoDB
-     * @throws \Exception
+     * @throws MysqlException|TableException
      */
     public static function innodb(): void
     {
