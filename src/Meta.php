@@ -23,7 +23,6 @@ class Meta
      * 数据类型转换成可读格式
      * @param $field array 字段描述
      * @return string 类型
-     * @throws MetaException
      */
     public static function mapType(array $field): string
     {
@@ -65,20 +64,20 @@ class Meta
             return '日期';
         }
 
-        throw new MetaException('无法识别的数据类型:' . json($type), MetaException::TYPE_UNKNOWN);
+        trigger_error('无法识别的数据类型:' . json($type), E_USER_ERROR);
+        return '';
     }
 
     /**
      * 获取全部数据库
      * @return array
-     * @throws MetaException
      */
     public static function dictDatabases(): array
     {
         //取全部数据库
         $dbsConfig = configDefault('', 'database');
         if (!$dbsConfig) {
-            throw new MetaException('缺少数据库配置(database)', MetaException::DATABASE_CONFIG_MISS);
+            trigger_error('缺少数据库配置(database)', E_USER_ERROR);
         }
         $dbs = [];
 
@@ -93,7 +92,7 @@ class Meta
     /**
      * 获取指定库有的全部表的描述 信息
      * @return array
-     * @throws MetaException|MysqlException|TableException
+     * @throws MysqlException
      */
     public static function dictTables(): array
     {
@@ -134,7 +133,7 @@ class Meta
      * 获取一个表的数据字典描述
      * @param $name string 表名
      * @return array
-     * @throws TableException|MysqlException
+     * @throws MysqlException
      */
     public static function dictTable(string $name): array
     {
@@ -209,7 +208,7 @@ class Meta
     /**
      * 生成一个表的记录基类
      * @param array $info 表信息
-     * @throws TableException|MysqlException
+     * @throws MysqlException
      */
     static private function recordBase(array $info): void
     {
@@ -374,7 +373,7 @@ class Meta
     /**
      * 生成一个表的基类
      * @param $info array 表信息
-     * @throws TableException|MysqlException
+     * @throws MysqlException
      */
     static private function tableBase(array $info): void
     {
@@ -568,7 +567,7 @@ class Meta
     /**
      * 自动创建一个表对象
      * @param string $table 表名
-     * @throws MysqlException|TableException
+     * @throws MysqlException
      */
     static public function tableOne(string $table): void
     {
@@ -578,9 +577,9 @@ class Meta
         $info = self::dictTable($table);
 
         // 字段信息
-        $fileds = array_values($info)[2];
+        $fields = array_values($info)[2];
 
-        if (empty($fileds)) {
+        if (empty($fields)) {
             exit('表名称错误，或者此表没有任何字段');
         }
 
@@ -594,7 +593,7 @@ class Meta
     /**
      * 自动创建一个记录对象
      * @param string $table 表名
-     * @throws MysqlException|TableException
+     * @throws MysqlException
      */
     static public function recordOne(string $table): void
     {
@@ -604,9 +603,9 @@ class Meta
         $info = self::dictTable($table);
 
         // 字段信息
-        $fileds = array_values($info)[2];
+        $fields = array_values($info)[2];
 
-        if (empty($fileds)) {
+        if (empty($fields)) {
             exit('表名称错误，或者此表没有任何字段');
         }
 
@@ -750,7 +749,7 @@ class Meta
 
     /**
      * 修复数据库中的所有表
-     * @throws TableException|MysqlException
+     * @throws MysqlException
      */
     public static function repair(): void
     {
@@ -779,7 +778,7 @@ class Meta
 
     /**
      * 将所有MyISAM修改为InnoDB
-     * @throws MysqlException|TableException
+     * @throws MysqlException
      */
     public static function innodb(): void
     {

@@ -7,7 +7,7 @@ namespace icePHP;
  * 获取一个表的数据字典描述
  * @param $name string 表名
  * @return array
- * @throws TableException|MysqlException
+ * @throws MysqlException
  */
 function meta(string $name): array
 {
