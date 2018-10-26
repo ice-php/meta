@@ -3,7 +3,6 @@
 	 * 根据ID获取一条记录
 	 * @param int $id 编号ID
 	 * @return R{$className}
-	 * @throws \Exception
 	 */
 	public function info($id) // : R{$className}
 	{
