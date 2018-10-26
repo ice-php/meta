@@ -16,7 +16,6 @@
 	* @param $where mixed 查询条件
 	* @param $orderBy mixed 排序
 	* @return R{$className}
-	* @throws \Exception
 	*/
 	public function row ($fields = null, $where = null, $orderBy = null) // : R{$className}
 	{
