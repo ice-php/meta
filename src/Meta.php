@@ -242,7 +242,7 @@ class Meta
         $enumContent = '';
 
         //每一个字段的数据类型
-        $fieldsType=[];
+        $fieldsType = [];
 
         //逐个字段处理
         foreach ($fields as $field) {
@@ -263,7 +263,7 @@ class Meta
             $enumContent .= $eContent;
 
             //字段与类型的对应
-            $fieldsType[]="'{$field['name']}'=>'$type'";
+            $fieldsType[] = "'{$field['name']}'=>'$type'";
         }
 
         $content = Template::replace(self::getTpl('record/record'), [
@@ -276,7 +276,7 @@ class Meta
             'primaryKey' => table($name)->getPrimaryKey(),
             'fieldsNameContent' => $fieldsNameCode,
             'enumContent' => $enumContent,
-            'fieldsType'=>'['.implode(',',$fieldsType)
+            'fieldsType' => '[' . implode(',', $fieldsType) . ']'
         ]);
 
         // 显示生成进度
