@@ -244,6 +244,10 @@ class Meta
         //所有枚举字段的代码
         $enumContent = '';
 
+        //每一个字段的数据类型
+        $fieldsType=[];
+
+        //逐个字段处理
         foreach ($fields as $field) {
             $type = $field['type'];
             if (in_array($type, ['longtext', 'ProductX', 'varchar', 'char', 'enum', 'date', 'datetime', 'time', 'mediumtext'])) $type = 'string';
@@ -260,6 +264,9 @@ class Meta
             list($fContent, $eContent) = self::recordField($field);
             $fieldsNameCode .= $fContent;
             $enumContent .= $eContent;
+
+            //字段与类型的对应
+            $fieldsType[]="'{$field['name']}'=>'$type'";
         }
 
         $content = Template::replace(self::getTpl('record/record'), [
@@ -272,6 +279,7 @@ class Meta
             'primaryKey' => table($name)->getPrimaryKey(),
             'fieldsNameContent' => $fieldsNameCode,
             'enumContent' => $enumContent,
+            'fieldsType'=>'['.implode(',',$fieldsType)
         ]);
 
         // 显示生成进度
