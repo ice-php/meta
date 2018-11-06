@@ -92,7 +92,6 @@ class Meta
     /**
      * 获取指定库有的全部表的描述 信息
      * @return array
-     * @throws MysqlException
      */
     public static function dictTables(): array
     {
@@ -133,7 +132,6 @@ class Meta
      * 获取一个表的数据字典描述
      * @param $name string 表名
      * @return array
-     * @throws MysqlException
      */
     public static function dictTable(string $name): array
     {
@@ -208,7 +206,6 @@ class Meta
     /**
      * 生成一个表的记录基类
      * @param array $info 表信息
-     * @throws MysqlException
      */
     static private function recordBase(array $info): void
     {
@@ -381,7 +378,6 @@ class Meta
     /**
      * 生成一个表的基类
      * @param $info array 表信息
-     * @throws MysqlException
      */
     static private function tableBase(array $info): void
     {
@@ -520,7 +516,6 @@ class Meta
 
     /**
      * 自动创建表对象
-     * @throws MysqlException|TableException
      */
     static public function table(): void
     {
@@ -547,7 +542,6 @@ class Meta
 
     /**
      * 自动创建表对象
-     * @throws MysqlException|TableException
      */
     static public function record(): void
     {
@@ -575,7 +569,6 @@ class Meta
     /**
      * 自动创建一个表对象
      * @param string $table 表名
-     * @throws MysqlException
      */
     static public function tableOne(string $table): void
     {
@@ -601,7 +594,6 @@ class Meta
     /**
      * 自动创建一个记录对象
      * @param string $table 表名
-     * @throws MysqlException
      */
     static public function recordOne(string $table): void
     {
@@ -626,7 +618,6 @@ class Meta
 
     /**
      * 删除表数据
-     * @throws MysqlException|TableException
      */
     public static function deleteTableData(): void
     {
@@ -668,7 +659,6 @@ class Meta
      * 数据库升级后的对比
      * @param $configSrc array 新库(源)的连接配置
      * @param $configTrg array 旧库(目标)的连接配置
-     * @throws MysqlException
      */
     public static function compare(array $configSrc, array $configTrg): void
     {
@@ -757,7 +747,6 @@ class Meta
 
     /**
      * 修复数据库中的所有表
-     * @throws MysqlException
      */
     public static function repair(): void
     {
@@ -786,7 +775,6 @@ class Meta
 
     /**
      * 将所有MyISAM修改为InnoDB
-     * @throws MysqlException
      */
     public static function innodb(): void
     {
