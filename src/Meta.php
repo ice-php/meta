@@ -246,10 +246,7 @@ class Meta
 
         //逐个字段处理
         foreach ($fields as $field) {
-            $type = $field['type'];
-            if (in_array($type, ['longtext', 'ProductX', 'varchar', 'char', 'enum', 'date', 'datetime', 'time', 'mediumtext'])) $type = 'string';
-            if (in_array($type, ['timestamp', 'tinyint', 'bigint'])) $type = 'int';
-            if ('decimal' == $type) $type = 'float';
+            $type = self::getType($field['type']);
             $fieldsContent .= Template::replace(self::getTpl('record/field'), [
                 'fieldName' => $field['name'],
                 'type' => $type,
@@ -284,6 +281,25 @@ class Meta
 
         //覆盖文件
         write($path, $content);
+    }
+
+    /**
+     * 根据字段的type(数据库),计算PHP中的数据类型
+     * @param string $type 数据库中的type
+     * @return string PHP中的数据类型:string/int/float
+     */
+    static private function getType(string $type): string
+    {
+        if (in_array($type, ['longtext', 'ProductX', 'varchar', 'char', 'enum', 'date', 'datetime', 'time', 'mediumtext'])) {
+            return 'string';
+        }
+        if (in_array($type, ['timestamp', 'tinyint', 'bigint'])) {
+            return 'int';
+        }
+        if ('decimal' == $type) {
+            return 'float';
+        }
+        return 'string';
     }
 
     /**
@@ -419,16 +435,23 @@ class Meta
         //所有枚举字段的代码
         $enumContent = '';
 
+        //全部字段的数据类型
+        $fieldsType = [];
+
         // 每个字段
-        foreach ($fields as $f) {
-            $fieldsName[] = $f['name'];
+        foreach ($fields as $field) {
+            $fieldsName[] = $field['name'];
 
             //计算此字段的三种数据
-            list($fContent, $eContent, $sWhere) = self::tableField($f);
+            list($fContent, $eContent, $sWhere) = self::tableField($field);
 
             $fieldsContent .= $fContent;
             $enumContent .= $eContent;
             $searchWhere .= $sWhere;
+
+            //字段与类型的对应
+            $type = self::getType($field['type']);
+            $fieldsType[] = "'{$field['name']}'=>'$type'";
         }
 
         $content = Template::replace(self::getTpl('table/class'), [
@@ -455,6 +478,9 @@ class Meta
 
             // 所有字段
             'fieldsName' => "['" . implode("','", $fieldsName) . "'] ",
+
+            //字段的数据类型
+            'fieldsType' => '[' . implode(',', $fieldsType) . ']',
 
             //字段名方法
             'fieldsContent' => $fieldsContent,

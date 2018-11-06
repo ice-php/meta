@@ -5,13 +5,9 @@
  */
 declare(strict_types=1);
 
-use icePHP\{
-	Table
-};
+use icePHP\Table;
 
-use function icePHP\{
-	page
-};
+use function icePHP\page;
 
 class T{$baseName} extends Table{
     /**
@@ -48,6 +44,9 @@ class T{$baseName} extends Table{
     {$methods}    
 	//本表常用字段列表
 	public static $fields={$fieldsName};
+
+	//本表全部字段的数据类型
+	public static $fieldsType={$fieldsType};
 
 	{$fieldsContent}
 	{$enumContent}
