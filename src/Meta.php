@@ -286,18 +286,19 @@ class Meta
     /**
      * 根据字段的type(数据库),计算PHP中的数据类型
      * @param string $type 数据库中的type
-     * @return string PHP中的数据类型:string/int/float
+     * @return string PHP中的数据类型:string/int/float|bool
      */
     static private function getType(string $type): string
     {
-        if (in_array($type, ['longtext', 'ProductX', 'varchar', 'char', 'enum', 'date', 'datetime', 'time', 'mediumtext'])) {
-            return 'string';
-        }
-        if (in_array($type, ['timestamp', 'tinyint', 'bigint'])) {
+        $type = strtolower($type);
+        if (in_array($type, ['timestamp', 'tinyint', 'bigint', 'int', 'smallint', 'mediumint', 'integer', 'year'])) {
             return 'int';
         }
-        if ('decimal' == $type) {
+        if (in_array($type, ['decimal', 'float', 'double'])) {
             return 'float';
+        }
+        if ($type == 'bit') {
+            return 'bool';
         }
         return 'string';
     }
