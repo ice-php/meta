@@ -439,9 +439,6 @@ class Meta
             $fieldsContent .= $fContent;
             $enumContent .= $eContent;
             $searchWhere .= $sWhere;
-
-            //字段与类型的对应
-            $type = self::getType($field['type']);
         }
 
         $content = Template::replace(self::getTpl('table/class'), [
