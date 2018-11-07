@@ -45,9 +45,6 @@ class T{$baseName} extends Table{
 	//本表常用字段列表
 	public static $fields={$fieldsName};
 
-	//本表全部字段的数据类型
-	public static $fieldsType={$fieldsType};
-
 	{$fieldsContent}
 	{$enumContent}
 

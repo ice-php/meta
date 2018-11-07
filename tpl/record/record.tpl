@@ -21,9 +21,6 @@ class R{$baseName} extends Record{
     //表{$description}的所有字段名
     protected static $_fields={$fieldsName};
 
-    //表{$description}的所有字段数据类型
-    protected static $_fieldsType={$fieldsType};
-
     //本表所有字段名的常量
     {$fieldsNameContent}
 

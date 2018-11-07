@@ -241,9 +241,6 @@ class Meta
         //所有枚举字段的代码
         $enumContent = '';
 
-        //每一个字段的数据类型
-        $fieldsType = [];
-
         //逐个字段处理
         foreach ($fields as $field) {
             $type = self::getType($field['type']);
@@ -258,9 +255,6 @@ class Meta
             list($fContent, $eContent) = self::recordField($field);
             $fieldsNameCode .= $fContent;
             $enumContent .= $eContent;
-
-            //字段与类型的对应
-            $fieldsType[] = "'{$field['name']}'=>'$type'";
         }
 
         $content = Template::replace(self::getTpl('record/record'), [
@@ -273,7 +267,6 @@ class Meta
             'primaryKey' => table($name)->getPrimaryKey(),
             'fieldsNameContent' => $fieldsNameCode,
             'enumContent' => $enumContent,
-            'fieldsType' => '[' . implode(',', $fieldsType) . ']'
         ]);
 
         // 显示生成进度
@@ -436,9 +429,6 @@ class Meta
         //所有枚举字段的代码
         $enumContent = '';
 
-        //全部字段的数据类型
-        $fieldsType = [];
-
         // 每个字段
         foreach ($fields as $field) {
             $fieldsName[] = $field['name'];
@@ -452,7 +442,6 @@ class Meta
 
             //字段与类型的对应
             $type = self::getType($field['type']);
-            $fieldsType[] = "'{$field['name']}'=>'$type'";
         }
 
         $content = Template::replace(self::getTpl('table/class'), [
@@ -479,9 +468,6 @@ class Meta
 
             // 所有字段
             'fieldsName' => "['" . implode("','", $fieldsName) . "'] ",
-
-            //字段的数据类型
-            'fieldsType' => '[' . implode(',', $fieldsType) . ']',
 
             //字段名方法
             'fieldsContent' => $fieldsContent,
